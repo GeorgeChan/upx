@@ -144,7 +144,7 @@ func (driver *FsDriver) dlFileWithProgress(src, des string) {
 
 	skip := false
 	if dkInfo,e := os.Lstat(des);e==nil && int(upInfo.Size)==int(dkInfo.Size()) {
-		skip = true
+		return
 	}
 
 	bar := driver.NewProgressBar(barSize, skip, driver.dlFile, src, des)
