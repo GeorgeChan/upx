@@ -123,7 +123,9 @@ func (driver *FsDriver) NewProgressBar(barSize int, skip bool,
 	})
 
 	go func() {
-		err = f(srcPath, desPath)
+		if skip==false {
+			err = f(srcPath, desPath)
+		}
 		bar.Set(bar.Total)
 	}()
 
@@ -141,6 +143,10 @@ func (driver *FsDriver) dlFileWithProgress(src, des string) {
 	}
 
 	skip := false
+	if dkInfo,e := os.Lstat(des);e==nil && int(upInfo.Size)==int(dkInfo.Size()) {
+		skip = true
+	}
+
 	bar := driver.NewProgressBar(barSize, skip, driver.dlFile, src, des)
 
 	for upInfo != nil && bar.Current() != bar.Total {
